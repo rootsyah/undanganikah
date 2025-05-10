@@ -1,47 +1,73 @@
+#!/usr/bin/env node
+
 import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 
-// Pastikan build untuk vercel
-console.log('🏗️ Memulai proses build untuk Vercel...');
-
-// Build client menggunakan Vite
-console.log('🔨 Building client...');
-execSync('vite build', { stdio: 'inherit' });
-
-// Pastikan folder api disalin ke dist
-console.log('📂 Copying API files to dist...');
-const apiSourceDir = path.resolve('./api');
-const apiDestDir = path.resolve('./dist/api');
-
-// Buat folder api jika belum ada
-if (!fs.existsSync(apiDestDir)) {
-  fs.mkdirSync(apiDestDir, { recursive: true });
-  console.log('📁 Created api directory in dist');
+// Fungsi untuk menjalankan command
+function run(command) {
+  console.log(`🔨 Running: ${command}`);
+  try {
+    execSync(command, { stdio: 'inherit' });
+  } catch (error) {
+    console.error(`❌ Error: ${error.message}`);
+    process.exit(1);
+  }
 }
 
-// Salin file API
-fs.readdirSync(apiSourceDir).forEach(file => {
-  const sourcePath = path.join(apiSourceDir, file);
-  const destPath = path.join(apiDestDir, file);
+// Clear dist directory
+if (fs.existsSync('dist')) {
+  console.log('🧹 Clearing dist directory...');
+  fs.rmSync('dist', { recursive: true, force: true });
+}
 
-  // Jika file adalah direktori, salin secara rekursif
-  if (fs.statSync(sourcePath).isDirectory()) {
-    if (!fs.existsSync(destPath)) {
-      fs.mkdirSync(destPath, { recursive: true });
-    }
-    
-    // Salin file di dalam direktori
-    fs.readdirSync(sourcePath).forEach(subFile => {
-      const subSourcePath = path.join(sourcePath, subFile);
-      const subDestPath = path.join(destPath, subFile);
-      fs.copyFileSync(subSourcePath, subDestPath);
-      console.log(`📄 Copied ${subSourcePath} to ${subDestPath}`);
-    });
-  } else {
-    fs.copyFileSync(sourcePath, destPath);
-    console.log(`📄 Copied ${sourcePath} to ${destPath}`);
+// Create fresh dist directory
+fs.mkdirSync('dist', { recursive: true });
+
+// Build client
+console.log('🔨 Building client...');
+run('vite build');
+
+// Move files from dist/public to dist root if needed
+if (fs.existsSync('dist/public')) {
+  console.log('📂 Moving files from dist/public to dist root...');
+  const files = fs.readdirSync('dist/public');
+  for (const file of files) {
+    const srcPath = path.join('dist/public', file);
+    const destPath = path.join('dist', file);
+    fs.cpSync(srcPath, destPath, { recursive: true });
   }
-});
+  fs.rmSync('dist/public', { recursive: true, force: true });
+}
 
-console.log('✅ Build selesai!');
+// Create API directory
+fs.mkdirSync('dist/api', { recursive: true });
+
+// Copy API files
+console.log('📂 Copying API files...');
+const apiFiles = fs.readdirSync('api');
+for (const file of apiFiles) {
+  const srcPath = path.join('api', file);
+  const destPath = path.join('dist/api', file);
+  
+  if (fs.lstatSync(srcPath).isDirectory()) {
+    fs.mkdirSync(destPath, { recursive: true });
+    const nestedFiles = fs.readdirSync(srcPath);
+    for (const nestedFile of nestedFiles) {
+      fs.copyFileSync(
+        path.join(srcPath, nestedFile),
+        path.join(destPath, nestedFile)
+      );
+    }
+  } else {
+    fs.copyFileSync(srcPath, destPath);
+  }
+}
+
+// Verify build
+if (!fs.existsSync('dist/index.html')) {
+  console.error('❌ Error: index.html not found in dist');
+  process.exit(1);
+}
+
+console.log('✅ Build completed successfully!');
