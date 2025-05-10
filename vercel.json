@@ -1,6 +1,6 @@
 {
   "framework": "vite",
-  "buildCommand": "./vercel-build.sh",
+  "buildCommand": "bash vercel-build.sh",
   "outputDirectory": "dist",
   "functions": {
     "api/**/*.js": {
