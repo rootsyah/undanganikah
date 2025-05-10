@@ -1,29 +1,52 @@
 #!/bin/bash
 
-# Build client saja (tanpa server)
+# Clear dist directory if it exists
+if [ -d "dist" ]; then
+  echo "🧹 Clearing dist directory..."
+  rm -rf dist
+fi
+
+# Create fresh dist directory
+mkdir -p dist
+
+# Build client
 echo "🔨 Building client..."
 vite build
 
-# Pastikan output berada di root dist bukan di dist/public
-echo "📂 Menyesuaikan struktur output..."
+# Move files from dist/public to dist root if needed
 if [ -d "dist/public" ]; then
-  echo "Memindahkan file dari dist/public ke dist..."
+  echo "📂 Moving files from dist/public to dist root..."
   cp -r dist/public/* dist/
   rm -rf dist/public
 fi
 
-# Pastikan folder API disalin
-echo "📂 Copying API files to dist..."
-mkdir -p dist/api
-
-# Salin file API
-cp -r api/* dist/api/
-
-# Pastikan index.html ada di root
-echo "📂 Verifikasi index.html ada di root..."
+# Create index.html in dist if it doesn't exist (safety check)
 if [ ! -f "dist/index.html" ]; then
-  echo "PERINGATAN: index.html tidak ditemukan di root dist"
-  ls -la dist
+  echo "⚠️ index.html not found in dist, creating basic one..."
+  cat <<EOF > dist/index.html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Undangan - Template Undangan Digital</title>
+  <link rel="stylesheet" href="/assets/index-Cp6rgrUk.css">
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/assets/index-BLAc_xpX.js"></script>
+</body>
+</html>
+EOF
 fi
 
-echo "✅ Build selesai!"
+# Copy API files
+echo "📂 Copying API files to dist..."
+mkdir -p dist/api
+cp -r api/* dist/api/
+
+# Verify dist structure
+echo "📂 Final dist structure:"
+find dist -type f | sort
+
+echo "✅ Build completed successfully!"
