@@ -1,0 +1,30 @@
+{
+  "framework": "vite",
+  "buildCommand": "./vercel-build.sh",
+  "outputDirectory": "dist",
+  "functions": {
+    "api/**/*.js": {
+      "memory": 1024
+    }
+  },
+  "rewrites": [
+    { "source": "/api/templates", "destination": "/api/templates.js" },
+    { "source": "/api/templates/featured", "destination": "/api/featured.js" },
+    { "source": "/api/templates/:id", "destination": "/api/templates/[id].js" },
+    { "source": "/api/testimonials", "destination": "/api/testimonials.js" },
+    { "source": "/api/contact", "destination": "/api/contact.js" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type" }
+      ]
+    }
+  ],
+  "trailingSlash": false,
+  "cleanUrls": true
+}
