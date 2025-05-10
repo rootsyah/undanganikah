@@ -1,12 +1,8 @@
 {
-  "framework": "vite",
-  "buildCommand": "bash vercel-build.sh",
+  "version": 2,
+  "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "functions": {
-    "api/**/*.js": {
-      "memory": 1024
-    }
-  },
+  "framework": "vite",
   "rewrites": [
     { "source": "/api/templates", "destination": "/api/templates.js" },
     { "source": "/api/templates/featured", "destination": "/api/featured.js" },
@@ -24,7 +20,5 @@
         { "key": "Access-Control-Allow-Headers", "value": "Content-Type" }
       ]
     }
-  ],
-  "trailingSlash": false,
-  "cleanUrls": true
+  ]
 }
