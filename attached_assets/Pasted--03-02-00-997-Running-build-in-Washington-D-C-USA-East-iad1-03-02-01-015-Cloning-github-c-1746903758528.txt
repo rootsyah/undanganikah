@@ -1,0 +1,36 @@
+[03:02:00.997] Running build in Washington, D.C., USA (East) – iad1
+[03:02:01.015] Cloning github.com/rootsyah/weddingtemplate (Branch: main, Commit: 2190536)
+[03:02:01.212] Previous build caches not available
+[03:02:01.351] Cloning completed: 336.000ms
+[03:02:01.699] Running "vercel build"
+[03:02:02.088] Vercel CLI 41.7.3
+[03:02:02.804] Installing dependencies...
+[03:02:07.928] npm warn deprecated @esbuild-kit/esm-loader@2.6.5: Merged into tsx: https://tsx.is
+[03:02:07.942] npm warn deprecated @esbuild-kit/core-utils@3.3.2: Merged into tsx: https://tsx.is
+[03:02:12.658] 
+[03:02:12.660] added 484 packages in 9s
+[03:02:12.661] 
+[03:02:12.673] 64 packages are looking for funding
+[03:02:12.673]   run `npm fund` for details
+[03:02:12.847] 
+[03:02:12.847] > rest-express@1.0.0 build
+[03:02:12.848] > vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+[03:02:12.848] 
+[03:02:13.138] [36mvite v5.4.14 [32mbuilding for production...[36m[39m
+[03:02:13.189] transforming...
+[03:02:13.519] Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+[03:02:13.519]   npx update-browserslist-db@latest
+[03:02:13.519]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[03:02:17.261] [32m✓[39m 1690 modules transformed.
+[03:02:17.529] rendering chunks...
+[03:02:17.538] computing gzip size...
+[03:02:17.553] [2m../dist/public/[22m[32mindex.html                 [39m[1m[2m  1.54 kB[22m[1m[22m[2m │ gzip:   0.68 kB[22m
+[03:02:17.554] [2m../dist/public/[22m[2massets/[22m[35mindex-Cp6rgrUk.css  [39m[1m[2m 65.46 kB[22m[1m[22m[2m │ gzip:  11.42 kB[22m
+[03:02:17.554] [2m../dist/public/[22m[2massets/[22m[36mindex-BLAc_xpX.js   [39m[1m[2m348.34 kB[22m[1m[22m[2m │ gzip: 106.13 kB[22m
+[03:02:17.554] [32m✓ built in 4.39s[39m
+[03:02:17.586] ✘ [ERROR] The entry point "server/index.ts" cannot be marked as external
+[03:02:17.587] 
+[03:02:17.589] 1 error
+[03:02:17.600] Error: Command "npm run build" exited with 1
+[03:02:17.850] 
+[03:02:20.931] Exiting build container
